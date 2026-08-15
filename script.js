@@ -431,12 +431,12 @@ async function revealAppShell() {
 }
 
 /**
- * Main contact form (Contact tab). Instant UI: reset + success, then confirms in background.
+ * Footer contact form. Instant UI: reset + success, then confirms in background.
  */
-class MainContactForm {
+class FooterContactForm {
     constructor() {
-        this.form = document.getElementById("main-contact-form");
-        this.statusEl = document.getElementById("main-contact-status");
+        this.form = document.getElementById("footer-contact-form");
+        this.statusEl = document.getElementById("footer-contact-status");
         this._inFlight = false;
         this._statusTimer = 0;
 
@@ -449,14 +449,14 @@ class MainContactForm {
         if (!this.statusEl) return;
         this.statusEl.textContent = message;
         this.statusEl.className = type
-            ? `main-contact-form__status ${type}`
-            : "main-contact-form__status";
+            ? `footer-form__status ${type}`
+            : "footer-form__status";
 
         if (type === "success") {
             window.clearTimeout(this._statusTimer);
             this._statusTimer = window.setTimeout(() => {
                 this.statusEl.textContent = "";
-                this.statusEl.className = "main-contact-form__status";
+                this.statusEl.className = "footer-form__status";
             }, 5000);
         }
     }
@@ -473,7 +473,7 @@ class MainContactForm {
         const payload = {
             name: String(formData.get("name") || "").trim(),
             email: String(formData.get("email") || "").trim(),
-            subject: String(formData.get("subject") || "").trim(),
+            subject: "Message from footer",
             message: String(formData.get("message") || "").trim(),
         };
 
@@ -509,7 +509,7 @@ class MainContactForm {
 }
 
 /**
- * Tab navigation: Projects, Education, Contact.
+ * Tab navigation: Education, Projects, Certification, Partnership.
  */
 class TabNavigation {
     constructor() {
@@ -519,7 +519,7 @@ class TabNavigation {
         if (!this.tabs.length || !this.sections.length) return;
 
         this.tabs.forEach((tab) => {
-            tab.addEventListener("click", () => this.switchTab(tab));
+            tab.addEventListener("click", () => this.switchTab(tab, true));
         });
     }
 
@@ -528,7 +528,7 @@ class TabNavigation {
         if (tab) this.switchTab(tab);
     }
 
-    switchTab(clickedTab) {
+    switchTab(clickedTab, scrollToSection = false) {
         const targetSection = clickedTab.dataset.section;
 
         this.tabs.forEach((tab) => tab.classList.remove("active"));
@@ -537,33 +537,12 @@ class TabNavigation {
 
         const targetElement = document.getElementById(`${targetSection}-section`);
         if (targetElement) targetElement.classList.add("active");
-    }
-}
 
-function wireGoToContact(tabNav) {
-    document.getElementById("go-to-contact")?.addEventListener("click", () => {
-        tabNav.switchTo("contact");
-        document.getElementById("contact-section")?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-        });
-    });
-}
-
-function rotateProfileGif() {
-    const gifs = [
-        "/images/coding.gif",
-        "/images/coding1.gif",
-        "/images/coding2.gif",
-        "/images/coding3.gif",
-        "/images/coding4.gif",
-    ];
-
-    const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-    const profileImg = document.querySelector(".profile-img");
-
-    if (profileImg) {
-        profileImg.src = randomGif;
+        if (scrollToSection && window.innerWidth <= 768 && targetElement) {
+            requestAnimationFrame(() => {
+                targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+        }
     }
 }
 
@@ -610,13 +589,74 @@ function initCertModal() {
     });
 }
 
+/**
+ * Theme manager: light during the day (06:00–17:59), dark at night
+ * (18:00–05:59). The toggle button applies a temporary override; the
+ * theme re-syncs automatically when the time period changes.
+ */
+class ThemeManager {
+    constructor() {
+        this.root = document.documentElement;
+        this.toggle = document.getElementById("theme-toggle");
+        this.NIGHT_START = 18;
+        this.NIGHT_END = 6;
+        this.period = this.currentPeriod();
+
+        if (!this.toggle) return;
+
+        this.apply(this.period === "night" ? "dark" : "light");
+
+        this.toggle.addEventListener("click", () => {
+            this.apply(this.theme === "dark" ? "light" : "dark");
+        });
+
+        setInterval(() => this.syncWithTime(), 60_000);
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) this.syncWithTime();
+        });
+    }
+
+    currentPeriod() {
+        const hour = new Date().getHours();
+        return hour >= this.NIGHT_START || hour < this.NIGHT_END
+            ? "night"
+            : "day";
+    }
+
+    syncWithTime() {
+        if (this.currentPeriod() !== this.period) {
+            this.period = this.currentPeriod();
+            this.apply(this.period === "night" ? "dark" : "light");
+        }
+    }
+
+    apply(theme) {
+        const dark = theme === "dark";
+        this.theme = theme;
+        this.root.setAttribute("data-theme", theme);
+        this.toggle.setAttribute("aria-pressed", String(dark));
+        this.toggle.setAttribute(
+            "aria-label",
+            dark ? "Switch to light theme" : "Switch to dark theme"
+        );
+
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#1b1b1b" : "#ffae00");
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+    new ThemeManager();
     const tabNav = new TabNavigation();
     new SolarSystem("bg-canvas");
-    new MainContactForm();
-    wireGoToContact(tabNav);
-    rotateProfileGif();
+    new FooterContactForm();
     initCertModal();
+
+    // On mobile, start with sidebar closed (check the toggle box)
+    const sidebarToggle = document.getElementById("sidebar-toggle");
+    if (sidebarToggle && window.innerWidth <= 768) {
+        sidebarToggle.checked = true;
+    }
 
     revealAppShell().catch(() => {
         document.body.classList.add("is-app-ready");
