@@ -1253,7 +1253,7 @@ body.is-app-ready .page-skeleton {
     position: fixed;
     left: 0.75rem;
     right: 0.75rem;
-    bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
     z-index: 50;
     display: flex;
     flex-wrap: nowrap;
@@ -1283,6 +1283,11 @@ body.is-app-ready .page-skeleton {
 
   .footer-links .footer-link-item:nth-child(-n+2) {
     grid-column: span 2;
+  }
+
+  /* Form card — extra bottom padding so the message field clears the floating tab pill */
+  .footer-form-panel {
+    padding: 1.75rem 1.75rem 2.75rem;
   }
 
   .nav-tab {
