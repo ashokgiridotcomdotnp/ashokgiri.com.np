@@ -1,9 +1,8 @@
 /* ===== Theme system (neo-brutalism) ===== */
 /* Default (light) — golden yellow dotted canvas + cream cards */
 :root {
-  --bg-gradient: radial-gradient(#000000 1px, transparent 1px) 0 0 / 16px
-      16px,
-    #ffae00;
+  --bg-gradient:
+    radial-gradient(#000000 1px, transparent 1px) 0 0 / 16px 16px, #ffae00;
   --bg-solid: #ffae00;
   --text-primary: #1a1a1a;
   --text-secondary: #2e2e2e;
@@ -29,9 +28,8 @@
 
 /* Dark — midnight canvas, same neon accents */
 [data-theme="dark"] {
-  --bg-gradient: radial-gradient(#ffffff 1px, transparent 1px) 0 0 / 16px
-      16px,
-    #1b1b1b;
+  --bg-gradient:
+    radial-gradient(#ffffff 1px, transparent 1px) 0 0 / 16px 16px, #1b1b1b;
   --bg-solid: #1b1b1b;
   --text-primary: #f2f2ee;
   --text-secondary: #d6d6cc;
@@ -80,7 +78,11 @@ html {
 body {
   position: relative;
   z-index: 1;
-  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  font-family:
+    "Plus Jakarta Sans",
+    system-ui,
+    -apple-system,
+    sans-serif;
   margin: 0;
   background: var(--bg-gradient);
   min-height: 100vh;
@@ -507,7 +509,9 @@ body.is-app-ready .page-skeleton {
   font-size: 0.88rem;
   font-weight: 500;
   outline: none;
-  transition: box-shadow 0.12s ease, background 0.12s ease;
+  transition:
+    box-shadow 0.12s ease,
+    background 0.12s ease;
 }
 
 .footer-form__field textarea {
@@ -669,7 +673,9 @@ body.is-app-ready .page-skeleton {
   border-radius: 16px;
   padding: 1.25rem;
   margin-bottom: 1rem;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
   position: relative;
   overflow: hidden;
   border: 2px solid var(--glass-border);
@@ -926,7 +932,10 @@ body.is-app-ready .page-skeleton {
   }
 
   /* Close button top-right on full-width sidebar */
-  .sidebar-toggle__input:not(:checked) ~ .grid-layout .sidebar .sidebar-close-btn {
+  .sidebar-toggle__input:not(:checked)
+    ~ .grid-layout
+    .sidebar
+    .sidebar-close-btn {
     position: fixed;
     top: 1rem;
     right: 1rem;
@@ -969,9 +978,10 @@ body.is-app-ready .page-skeleton {
 
 /* Certifications */
 .cert-card {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
   padding: 1rem 1.25rem;
   margin-bottom: 0.75rem;
   border-radius: 16px;
@@ -987,18 +997,16 @@ body.is-app-ready .page-skeleton {
   box-shadow: 5px 5px 0 0 var(--brutal-shadow);
 }
 
-.cert-icon {
+.cert-card__top {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: var(--secondary);
-  border: 2px solid var(--glass-border);
-  color: var(--secondary-contrast);
-  box-shadow: 2px 2px 0 0 var(--brutal-shadow);
-  flex-shrink: 0;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.cert-card__top h3 {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-right: 5.5rem;
 }
 
 .cert-info {
@@ -1036,6 +1044,9 @@ body.is-app-ready .page-skeleton {
   transition: all 0.12s ease;
   white-space: nowrap;
   flex-shrink: 0;
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
 }
 
 .cert-view-btn:hover {
@@ -1132,7 +1143,9 @@ body.is-app-ready .page-skeleton {
   background: var(--panel-solid);
   border: 2px solid var(--glass-border);
   box-shadow: 4px 4px 0 0 var(--brutal-shadow);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
 }
 
 .partner-card:hover {
@@ -1253,8 +1266,8 @@ body.is-app-ready .page-skeleton {
     position: fixed;
     left: 0.75rem;
     right: 0.75rem;
-    bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
     z-index: 50;
+    bottom: -.2rem;
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -1281,7 +1294,7 @@ body.is-app-ready .page-skeleton {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  .footer-links .footer-link-item:nth-child(-n+2) {
+  .footer-links .footer-link-item:nth-child(-n + 2) {
     grid-column: span 2;
   }
 
@@ -1401,7 +1414,7 @@ body.is-app-ready .page-skeleton {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .footer-links .footer-link-item:nth-child(-n+2) {
+  .footer-links .footer-link-item:nth-child(-n + 2) {
     grid-column: auto;
   }
 
