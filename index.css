@@ -448,14 +448,19 @@ body.is-app-ready .page-skeleton {
   margin-bottom: 16px;
 }
 
-/* Wide viewport (sidebar open): header + links on left (2 rows of 3), form on right */
+/* Footer stacks: header + links, form below */
 @media (min-width: 769px) {
   .footer-layout {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .footer-links {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Sidebar closed — contact form back beside the links */
+  .sidebar-toggle__input:checked ~ .grid-layout .footer-layout {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -1399,18 +1404,12 @@ body.is-app-ready .page-skeleton {
     padding: 0 16px calc(4.5rem + env(safe-area-inset-bottom, 0px));
   }
 
-  /* Footer Responsive */
+  /* Footer Responsive — links above, form below */
   .footer-layout {
     grid-template-columns: 1fr;
   }
 
-  /* Form above, social buttons directly above the footer line */
-  .footer-form-panel {
-    order: 2;
-  }
-
   .footer-links {
-    order: 3;
     grid-template-columns: repeat(2, 1fr);
   }
 
